@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCirclePlus, faCircleCheck, faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faCircleCheck, faHeart, faCommentDots, faBookmark, faShare, faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import './FooterRight.css';
 
-function FooterRight({ likes, comments, saves, shares, profilePic }) {
+function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle }) {
 
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -35,6 +35,11 @@ function FooterRight({ likes, comments, saves, shares, profilePic }) {
   const handleLikeClick = () => {
     setLiked((prevLiked) => !prevLiked)
   }
+
+  const handleMuteClick = () => {
+    setMuted((prevMuted) => !prevMuted);
+  }
+
   return (
     <div className='footer-right'>
       <div className='sidebar-icon'>
@@ -74,13 +79,20 @@ function FooterRight({ likes, comments, saves, shares, profilePic }) {
           <FontAwesomeIcon icon={faShare} style={{width:'35px',height:'35px', color:'white'}}/>
           <p>{shares}</p>
       </div>
+      <div className='sidebar-icon'>
+        <FontAwesomeIcon 
+          icon={muted ? faVolumeMute : faVolumeUp}
+          style={{width:'35px',height:'35px', color: 'white'}}
+          onClick={() => {
+            handleMuteClick();
+            onMuteToggle();
+          }}
+        />
+      </div>
       <div className='sidebar-icon record'>
           <img src="https://static.thenounproject.com/png/934821-200.png" alt="Record Icon" />
       </div>
-      {/* add another element */}
-      <div className='sidebar-icon'>
-
-      </div>
+     
     </div>
   );
 }
