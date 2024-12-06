@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faCircleCheck, faHeart, faCommentDots, faBookmark, faShare, faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import './FooterRight.css';
 
-function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle }) {
+function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle, videoUrl }) {
 
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -40,6 +40,10 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle 
     setMuted((prevMuted) => !prevMuted);
   }
 
+  const handleSaveClick = () => {
+    setSaved((prevSaved) => !prevSaved);
+    navigator.clipboard.writeText(videoUrl)
+  };
   return (
     <div className='footer-right'>
       <div className='sidebar-icon'>
@@ -65,13 +69,13 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle 
              <FontAwesomeIcon
              icon={faBookmark}
              style={{width:'35px',height:'35px',color: '#ffc107'}}
-             onClick={()=>setSaved(false)}
+             onClick={handleSaveClick}
            />
         ):(
           <FontAwesomeIcon
           icon={faBookmark}
           style={{width:'35px',height:'35px',color: 'white'}}
-          onClick={()=>setSaved(true)}/>
+          onClick={handleSaveClick}/>
         )}
          <p>{saved ? saves + 1: saves}</p>
       </div>

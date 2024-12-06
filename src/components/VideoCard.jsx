@@ -8,6 +8,8 @@ const VideoCard = (props) => {
     const {url, username, description, song, likes, shares, comments, saves, profilePic, setVideoRef, autoplay} = props
     const videoRef = useRef(null)
     const [isMuted, setIsMuted] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startY, setStartY] = useState(0);
 
     // useEffect(()=>{
     //   if (autoplay) {
@@ -16,20 +18,69 @@ const VideoCard = (props) => {
     // },[autoplay]);
 
     const onVideoPress = () => {
-      if (videoRef.current.paused) {
-        videoRef.current.play()
-      } else {
-        videoRef.current.pause()
-      }
-    }
+        if (!isDragging) 
+        {
+          if (videoRef.current.paused) 
+          {
+            videoRef.current.play();
+          } 
+          else 
+          {
+            videoRef.current.pause();
+          }
+        }
+    };
 
     const handleMuteToggle = () => {
       setIsMuted(prev => !prev);
       if (videoRef.current) videoRef.current.muted = !videoRef.current.muted;
     }
 
+    const mouseDown = (e) => {
+        setIsDragging(true);
+        setStartY(e.clientY);
+    };
+
+    const Move = (e) => {
+        if (isDragging) {
+            const deltaY = e.clientY - startY;
+            if (Math.abs(deltaY) > 10) {
+                handleScroll(deltaY);
+                setIsDragging(false);
+            }
+        }
+    };
+
+    const handleScroll = (deltaY) => {
+        const container = document.querySelector('.container');
+        const currentScroll = container.scrollTop;
+        const videoHeight = container.clientHeight;
+
+        if (deltaY > 0) {
+            scrollContainer(container, currentScroll - videoHeight);
+        } else {
+            scrollContainer(container, currentScroll + videoHeight);
+        }
+    };
+
+    const scrollContainer = (container, scrollTo) => {
+        container.scrollTo({
+            top: scrollTo,
+            behavior: 'smooth'
+        });
+    };
+
+    const mouseUp = () => {
+        setIsDragging(false);
+    };
+
   return (
-    <div className='video'>
+    <div className='video' 
+         onMouseDown={mouseDown} 
+         onMouseMove={Move} 
+         onMouseUp={mouseUp} 
+         onMouseLeave={mouseUp} 
+    >
       <video 
         className='player'
         onClick={onVideoPress}
@@ -52,6 +103,7 @@ const VideoCard = (props) => {
             saves={saves} 
             profilePic={profilePic} 
             onMuteToggle={handleMuteToggle}
+            videoUrl={url}
           />
         </div>
       </div>

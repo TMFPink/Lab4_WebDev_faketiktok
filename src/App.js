@@ -116,6 +116,7 @@ function App() {
             profilePic={video.profilePic}
             setVideoRef={handleVideoRef(index)}
             autoplay={index === 0}
+            
           />
         ))}
         <BottomNavbar className="bottom-navbar" />
