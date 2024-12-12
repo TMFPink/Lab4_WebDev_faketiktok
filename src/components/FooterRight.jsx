@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faCircleCheck, faHeart, faCommentDots, faBookmark, faShare, faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
+
+
 import './FooterRight.css';
+import { height, width } from '@fortawesome/free-solid-svg-icons/fa0';
 
 function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle, videoUrl }) {
 
@@ -10,7 +13,8 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle,
   const [userAddIcon, setUserAddIcon] = useState(false);
 
   const [muted, setMuted] = useState(false)
-  
+  const [showSharePopup, setShowSharePopup] = useState(false);
+
   const handleUserAddClick = ()=>{
     setUserAddIcon(faCircleCheck);
     setTimeout(()=>{
@@ -44,6 +48,15 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle,
     setSaved((prevSaved) => !prevSaved);
     navigator.clipboard.writeText(videoUrl)
   };
+
+  const handleShareClick = () => {
+    setShowSharePopup(true);
+  };
+
+  const closeSharePopup = () => {
+    setShowSharePopup(false);
+  };
+
   return (
     <div className='footer-right'>
       <div className='sidebar-icon'>
@@ -80,8 +93,12 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle,
          <p>{saved ? saves + 1: saves}</p>
       </div>
       <div className='sidebar-icon'>
-          <FontAwesomeIcon icon={faShare} style={{width:'35px',height:'35px', color:'white'}}/>
-          <p>{shares}</p>
+        <FontAwesomeIcon 
+          icon={faShare} 
+          style={{width:'35px',height:'35px', color:'white'}} 
+          onClick={handleShareClick}
+        />
+        <p>{shares}</p>
       </div>
       <div className='sidebar-icon'>
         <FontAwesomeIcon 
@@ -96,7 +113,27 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle,
       <div className='sidebar-icon record'>
           <img src="https://static.thenounproject.com/png/934821-200.png" alt="Record Icon" />
       </div>
-     
+
+      {showSharePopup && (
+        <div className="share-popup">
+          <div style={{display:'flex',justifyContent:'space-between',borderBottom:'1px gray solid'}}>
+            <span>Share options</span>
+            <button className="close-button" onClick={closeSharePopup}>X</button>
+          </div>
+          
+          <div className="share-options">
+            <div className="share-option">
+              <img src="https://img.icons8.com/?size=100&id=13912&format=png&color=000000" alt="" style={{ width: '50px', height: '50px' }}/>
+            </div>
+            <div className="share-option">
+            <img src="https://img.icons8.com/?size=100&id=Xy10Jcu1L2Su&format=png&color=000000" alt="" style={{ width: '50px', height: '50px' }}/>
+            </div>
+            <div className="share-option">
+            <img src="https://img.icons8.com/?size=100&id=1IYrDBzxNHjL&format=png&color=000000" alt="" style={{ width: '50px', height: '50px' , color:'white'}}/>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
