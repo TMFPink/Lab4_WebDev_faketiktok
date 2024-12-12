@@ -4,7 +4,6 @@ import VideoCard from './components/VideoCard';
 import BottomNavbar from './components/BottomNavbar';
 import TopNavbar from './components/TopNavbar';
 
-// This array holds information about different videos
 const videoUrls = [
   {
     url: require('./videos/video1.mp4'),
@@ -54,11 +53,22 @@ const videoUrls = [
 
 function App() {
   const [videos, setVideos] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const videoRefs = useRef([]);
 
   useEffect(() => {
     setVideos(videoUrls);
   }, []);
+
+  const filteredVideos = videos.filter(video => {
+    const hashtags = video.description.match(/#\w+/g) || [];
+    
+    if (!searchQuery) return true;
+    
+    return hashtags.some(tag => 
+      tag.toLowerCase() === `#${searchQuery.toLowerCase()}`
+    );
+  });
 
   useEffect(() => {
     const observerOptions = {
@@ -101,8 +111,8 @@ function App() {
   return (
     <div className="app">
       <div className="container">
-        <TopNavbar className="top-navbar" />
-        {videos.map((video, index) => (
+        <TopNavbar setSearchQuery={setSearchQuery} />
+        {filteredVideos.map((video, index) => (
           <VideoCard
             key={index}
             username={video.username}
