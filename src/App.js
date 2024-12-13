@@ -3,6 +3,7 @@ import './App.css';
 import VideoCard from './components/VideoCard';
 import BottomNavbar from './components/BottomNavbar';
 import TopNavbar from './components/TopNavbar';
+import UserProfile from './components/UserProfile';
 
 const videoUrls = [
   {
@@ -54,6 +55,8 @@ const videoUrls = [
 function App() {
   const [videos, setVideos] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const videoRefs = useRef([]);
 
   useEffect(() => {
@@ -108,28 +111,46 @@ function App() {
     videoRefs.current[index] = ref;
   };
 
+  const handleProfileClick = (username, profilePic, url) => {
+    setCurrentUser({ username, profilePic, url });
+    setShowProfile(true);
+  };
+
+  const handleHomeClick = () => {
+    setShowProfile(false);
+    setCurrentUser(null);
+  };
+
   return (
     <div className="app">
       <div className="container">
         <TopNavbar setSearchQuery={setSearchQuery} />
-        {filteredVideos.map((video, index) => (
-          <VideoCard
-            key={index}
-            username={video.username}
-            description={video.description}
-            song={video.song}
-            likes={video.likes}
-            saves={video.saves}
-            comments={video.comments}
-            shares={video.shares}
-            url={video.url}
-            profilePic={video.profilePic}
-            setVideoRef={handleVideoRef(index)}
-            autoplay={index === 0}
-            
+        {showProfile ? (
+          <UserProfile 
+            username={currentUser.username} 
+            profilePic={currentUser.profilePic} 
+            videoUrl={currentUser.url}
           />
-        ))}
-        <BottomNavbar className="bottom-navbar" />
+        ) : (
+          filteredVideos.map((video, index) => (
+            <VideoCard
+              key={index}
+              username={video.username}
+              description={video.description}
+              song={video.song}
+              likes={video.likes}
+              saves={video.saves}
+              comments={video.comments}
+              shares={video.shares}
+              url={video.url}
+              profilePic={video.profilePic}
+              setVideoRef={handleVideoRef(index)}
+              autoplay={index === 0}
+              onProfileClick={handleProfileClick}
+            />
+          ))
+        )}
+        <BottomNavbar onHomeClick={handleHomeClick} />
       </div>
     </div>
   );

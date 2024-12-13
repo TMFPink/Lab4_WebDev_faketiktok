@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faCircleCheck, faHeart, faCommentDots, faBookmark, faShare, faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 
+import UserProfile from './UserProfile';
 
 import './FooterRight.css';
-import { height, width } from '@fortawesome/free-solid-svg-icons/fa0';
 
-function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle, videoUrl }) {
+function FooterRight({ likes, comments, saves, shares, profilePic, username, onMuteToggle, videoUrl, onProfileClick }) {
 
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [userAddIcon, setUserAddIcon] = useState(false);
+  const [userAddIcon, setUserAddIcon] = useState(faCirclePlus);
 
-  const [muted, setMuted] = useState(false)
+  const [muted, setMuted] = useState(true)
   const [showSharePopup, setShowSharePopup] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState(false);
 
   const handleUserAddClick = ()=>{
     setUserAddIcon(faCircleCheck);
@@ -57,11 +58,15 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle,
     setShowSharePopup(false);
   };
 
+  const handleProfileClick = () => {
+    onProfileClick(username, profilePic,videoUrl);
+  };
+
   return (
     <div className='footer-right'>
       <div className='sidebar-icon'>
         {profilePic ? (
-          <img src={profilePic} alt="Profile" className='userprofile' style={{width:'45px',height:'45px',color:'#616161'}} />
+          <img src={profilePic} alt="Profile" className='userprofile' style={{width:'45px',height:'45px',color:'#616161'}} onClick={handleProfileClick} />
         ) : null}
         <FontAwesomeIcon icon={userAddIcon} className='useradd' style={{width:'15px',height:'15px',color:'#FF0000'}} onClick={handleUserAddClick}/>
       </div>
@@ -134,6 +139,8 @@ function FooterRight({ likes, comments, saves, shares, profilePic, onMuteToggle,
           </div>
         </div>
       )}
+
+      {showUserProfile && <UserProfile username={username} profilePic={profilePic} />}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import './VideoCard.css';
 
 const VideoCard = (props) => {
 
-    const {url, username, description, song, likes, shares, comments, saves, profilePic, setVideoRef, autoplay} = props
+    const {url, username, description, song, likes, shares, comments, saves, profilePic, setVideoRef, autoplay, onProfileClick, onHomeClick} = props
     const videoRef = useRef(null)
     const [isMuted, setIsMuted] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -89,11 +89,12 @@ const VideoCard = (props) => {
           setVideoRef(ref)
         }}
         loop
+        muted
         src={url}
       ></video>
       <div className='bottom-controls'>
         <div className='footer-left'>
-          <FooterLeft username={username} description={description} song={song}/>
+          <FooterLeft username={username} description={description} song={song} onHomeClick={onHomeClick}/>
         </div>
         <div className='footer-right'>
           <FooterRight 
@@ -102,8 +103,10 @@ const VideoCard = (props) => {
             comments={comments} 
             saves={saves} 
             profilePic={profilePic} 
+            username={username}
             onMuteToggle={handleMuteToggle}
             videoUrl={url}
+            onProfileClick={onProfileClick}
           />
         </div>
       </div>

@@ -2,10 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faUserFriends, faPlus, faInbox, fa7,faUser } from '@fortawesome/free-solid-svg-icons';
 
-function BottomNavbar() {
+function BottomNavbar({ onHomeClick }) {
   return (
     <div className='bottom-navbar'>
-      <div className='nav-item'>
+      <div className='nav-item' onClick={onHomeClick}>
         <FontAwesomeIcon icon={faHouse} className='icon'/>
         <span className="item-name active">Home</span>
       </div>
